@@ -10,15 +10,16 @@
 
   <link rel="stylesheet" href="css/styles.css?v=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/codemirror.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/hint/show-hint.css">
+  <link rel="stylesheet" href="https:///kendo.cdn.telerik.com/2016.3.1118/styles/kendo.common-material.min.css"/>
+  <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.3.1118/styles/kendo.material.min.css"/>
+  <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.3.1118/styles/kendo.material.mobile.min.css"/>
 
   <style>html {
     font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
   }</style>
   <title></title>
-  <link rel="stylesheet" href="//kendo.cdn.telerik.com/2016.3.1118/styles/kendo.common-material.min.css"/>
-  <link rel="stylesheet" href="//kendo.cdn.telerik.com/2016.3.1118/styles/kendo.material.min.css"/>
-  <link rel="stylesheet" href="//kendo.cdn.telerik.com/2016.3.1118/styles/kendo.material.mobile.min.css"/>
 
 </head>
 
@@ -93,12 +94,16 @@
 
       <div id="right-pane">
         <div class="pane-content">
+          <button data-ng-click="showCodeEditor()">Edit validation script</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="code"></div>
+  <div class="scriptpopup" data-ng-show="editingCode">
+    <div class="bar"><button data-ng-click="closeCodeEditor()">close</button></div>
+    <div id="code"></div>
+  </div>
 </div>
 
 <script src="js/jquery.min.js"></script>
@@ -112,9 +117,132 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/mode/simple.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/mode/javascript/javascript.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/edit/matchbrackets.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/hint/javascript-hint.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/hint/show-hint.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/search/match-highlighter.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jshint/r07/jshint.js"></script>
 
+<script src="https://kendo.cdn.telerik.com/2016.3.1118/js/jquery.min.js"></script>
+<script src="https://kendo.cdn.telerik.com/2016.3.1118/js/kendo.all.min.js"></script>
 <script src="js/scripts.js"></script>
+
+<script>
+  $("#horizontal").kendoSplitter({
+    panes: [
+      {collapsible: true},
+      {collapsible: false},
+      {collapsible: true}
+    ]
+  });
+
+  $("#vertical-left").kendoSplitter({
+    orientation: "vertical",
+    panes: [
+      {collapsible: false, size: "100px"},
+      {collapsible: false, size: "100px"}
+    ]
+  });
+  $("#vertical-center").kendoSplitter({
+    orientation: "vertical",
+    panes: [
+      {collapsible: false, size: "100px"},
+      {collapsible: false, size: "100px"}
+    ]
+  });
+</script>
+
+<script>
+  var sc = "function validateField(fieldValue){\n\n}";
+  var code = document.getElementById("code");
+  function hhint(editor, options) {
+    var attributes = [
+      "policyHolder",
+      "policyHolder.name",
+      "policyHolder.surname",
+      "policyHolder.address",
+      "policyHolder.addressCompany",
+      "policyHolder.addressCompany.street",
+      "policyHolder.addressCompany.city",
+      "policyHolder.address.street",
+      "policyHolder.address.city",
+      "policyHolder.address.postalCode",
+      "payments.totalPremium",
+      "payments.bankAccount"
+    ];
+    var ret = CodeMirror.helpers.hint.javascript(editor, options);
+    var cursor = editor.getCursor();
+    var line = editor.getLine(cursor.line).substr(0, cursor.ch);
+
+    var lastModel = line.lastIndexOf("model.");
+    if (lastModel !== -1) {
+      line = line.substr(lastModel + 6);
+      var lastDot = line.lastIndexOf(".");
+      console.log("first scan: "+line);
+      if (lastDot === -1) {
+        console.log(line);
+        attributes.forEach(function (path) {
+          if (path.indexOf(line) === 0)ret.list.push(path);
+        });
+      } else {
+        //line = line.substr(0, lastDot);
+        console.log(line);
+        attributes.forEach(function (path) {
+          if (path.indexOf(line) === 0)ret.list.push(path.substr(lastDot+1));
+        });
+      }
+
+    }
+    return ret;
+  }
+  //CodeMirror.helpers.hint.javascript
+  var editor = CodeMirror(code, {
+    extraKeys: {"Ctrl-Space": "autocomplete"},
+    value: (sc),
+    lineNumbers: true,
+    mode: "javascript",
+    matchBrackets: {bothBrackets: true},
+    highlightSelectionMatches: {showToken: /\w/, annotateScrollbar: true},
+    //mode: "text/x-markdown",
+    hintOptions: {hint: hhint}
+  });
+  var widgets = [];
+  function updateHints() {
+    editor.operation(function () {
+      for (var i = 0; i < widgets.length; ++i) {
+        editor.removeLineWidget(widgets[i]);
+      }
+      widgets.length = 0;
+
+      JSHINT(editor.getValue());
+      for (var i = 0; i < JSHINT.errors.length; ++i) {
+        var err = JSHINT.errors[i];
+        if (!err) {
+          continue;
+        }
+        var msg = document.createElement("div");
+        var icon = msg.appendChild(document.createElement("span"));
+        icon.innerHTML = "!!";
+        icon.className = "lint-error-icon";
+        msg.appendChild(document.createTextNode(err.reason));
+        msg.className = "lint-error";
+        widgets.push(editor.addLineWidget(err.line - 1, msg, {coverGutter: false, noHScroll: true}));
+      }
+    });
+    var info = editor.getScrollInfo();
+    var after = editor.charCoords({line: editor.getCursor().line + 1, ch: 0}, "local").top;
+    if (info.top + info.clientHeight < after) {
+      editor.scrollTo(null, after - info.clientHeight + 3);
+    }
+  }
+
+  var waiting;
+  editor.on("change", function () {
+    clearTimeout(waiting);
+    waiting = setTimeout(updateHints, 500);
+  });
+
+  setTimeout(updateHints, 100);
+</script>
 
 <script>
 
@@ -126,6 +254,5 @@
     }
   });
 </script>
-
 </body>
 </html>

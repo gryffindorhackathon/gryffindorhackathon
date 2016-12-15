@@ -20,15 +20,15 @@
   <link rel="stylesheet" href="//kendo.cdn.telerik.com/2016.3.1118/styles/kendo.material.min.css"/>
   <link rel="stylesheet" href="//kendo.cdn.telerik.com/2016.3.1118/styles/kendo.material.mobile.min.css"/>
 
-  <script src="//kendo.cdn.telerik.com/2016.3.1118/js/jquery.min.js"></script>
-  <script src="//kendo.cdn.telerik.com/2016.3.1118/js/kendo.all.min.js"></script>
-
 </head>
 
 <body data-ng-app="bestUI">
 <div data-ng-controller="BestUIController">
+  {{greeting}}
 
-  <div id="example">
+
+
+  <div id="example2">
     <div id="horizontal">
 
       <div id="left-pane">
@@ -39,6 +39,31 @@
           </div>
           <div id="bottom-pane-left">
             <div class="pane-content">
+              <div id="example">
+                <div class="demo-section k-content">
+                  <div class="box-col">
+                    <h4>TreeView</h4>
+                    <div kendo-tree-view="tree"
+                         k-data-source="treeData"
+                         k-on-change="selectedItem = dataItem">
+                <span k-template>
+                     {{dataItem.text}} <button class='k-button' ng-click='click(dataItem)'>Select</button>
+                 </span>
+                    </div>
+                  </div>
+                  <div class="box-col" ng-show="selectedItem">
+                    <h4>Selected: {{selectedItem.text}}</h4>
+                    <button class="k-button" ng-click="addAfter(selectedItem)">Add item below</button>
+                    <button class="k-button" ng-click="addBelow(selectedItem)">Add child item</button>
+                    <button class="k-button" ng-click="remove(selectedItem)">Delete</button>
+                  </div>
+                </div>
+                <style>
+                  .k-treeview .k-in {
+                    padding: 5px;
+                  }
+                </style>
+              </div>
             </div>
           </div>
         </div>
@@ -76,8 +101,13 @@
   <div id="code"></div>
 </div>
 
+<script src="js/jquery.min.js"></script>
+<script src="js/jszip.min.js"></script>
+<script src="js/console.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.9/angular.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.9/angular-route.js"></script>
+
+<script src="js/kendo.all.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/codemirror.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/mode/simple.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/mode/javascript/javascript.js"></script>
@@ -87,28 +117,7 @@
 <script src="js/scripts.js"></script>
 
 <script>
-  $("#horizontal").kendoSplitter({
-    panes: [
-      {collapsible: true},
-      {collapsible: false},
-      {collapsible: true}
-    ]
-  });
 
-  $("#vertical-left").kendoSplitter({
-    orientation: "vertical",
-    panes: [
-      {collapsible: false, size: "100px"},
-      {collapsible: false, size: "100px"}
-    ]
-  });
-  $("#vertical-center").kendoSplitter({
-    orientation: "vertical",
-    panes: [
-      {collapsible: false, resizable: false, size: "60px"},
-      {collapsible: false, size: "100px"}
-    ]
-  });
   $("#tabstrip").kendoTabStrip({
     animation: {
       open: {
@@ -116,55 +125,6 @@
       }
     }
   });
-</script>
-
-<script>
-  var sc = "function validateField(fieldValue){\n\n}";
-  var code = document.getElementById("code");
-  var editor = CodeMirror(code, {
-    value: (sc),
-    lineNumbers: true,
-    mode: "javascript",
-    matchBrackets: {bothBrackets: true},
-    highlightSelectionMatches: {showToken: /\w/, annotateScrollbar: true}
-  });
-  var widgets = [];
-  function updateHints() {
-    editor.operation(function () {
-      for (var i = 0; i < widgets.length; ++i) {
-        editor.removeLineWidget(widgets[i]);
-      }
-      widgets.length = 0;
-
-      JSHINT(editor.getValue());
-      for (var i = 0; i < JSHINT.errors.length; ++i) {
-        var err = JSHINT.errors[i];
-        if (!err) {
-          continue;
-        }
-        var msg = document.createElement("div");
-        var icon = msg.appendChild(document.createElement("span"));
-        icon.innerHTML = "!!";
-        icon.className = "lint-error-icon";
-        msg.appendChild(document.createTextNode(err.reason));
-        msg.className = "lint-error";
-        widgets.push(editor.addLineWidget(err.line - 1, msg, {coverGutter: false, noHScroll: true}));
-      }
-    });
-    var info = editor.getScrollInfo();
-    var after = editor.charCoords({line: editor.getCursor().line + 1, ch: 0}, "local").top;
-    if (info.top + info.clientHeight < after) {
-      editor.scrollTo(null, after - info.clientHeight + 3);
-    }
-  }
-
-  var waiting;
-  editor.on("change", function () {
-    clearTimeout(waiting);
-    waiting = setTimeout(updateHints, 500);
-  });
-
-  setTimeout(updateHints, 100);
 </script>
 
 </body>

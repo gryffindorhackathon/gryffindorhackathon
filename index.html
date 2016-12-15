@@ -26,8 +26,6 @@
 <div data-ng-controller="BestUIController">
   {{greeting}}
 
-
-
   <div id="example2">
     <div id="horizontal">
 
@@ -101,6 +99,23 @@
   <div id="code"></div>
 </div>
 
+<style>
+  #horizontal {
+    height: 1000px;
+    margin: 0 auto;
+  }
+
+  #vertical-left {
+    height: 100%;
+  }
+
+  .k-button {
+    background-color: #20568c;
+    color: white;
+    border-color: #20568c;
+  }
+</style>
+
 <script src="js/jquery.min.js"></script>
 <script src="js/jszip.min.js"></script>
 <script src="js/console.js"></script>
@@ -115,17 +130,6 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jshint/r07/jshint.js"></script>
 
 <script src="js/scripts.js"></script>
-
-<script>
-
-  $("#tabstrip").kendoTabStrip({
-    animation: {
-      open: {
-        effects: "fadeIn"
-      }
-    }
-  });
-</script>
 
 </body>
 </html>

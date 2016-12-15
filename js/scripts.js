@@ -1,6 +1,7 @@
-var bestUI = angular.module('bestUI', ['ngRoute', 'kendo.directives']).config(['$routeProvider', function ($routeProvider) {
-  $routeProvider.otherwise({redirectTo: '/'});
-}]);
+var bestUI = angular.module('bestUI', ['ngRoute', 'kendo.directives']).config(['$routeProvider',
+                                                                               function ($routeProvider) {
+                                                                                 $routeProvider.otherwise({redirectTo: '/'});
+                                                                               }]);
 
 bestUI.controller('BestUIController', ['$scope', function ($scope) {
   $scope.greeting = 'Hola!';
@@ -69,6 +70,13 @@ $("#vertical-center").kendoSplitter({
     {collapsible: false, size: "100px"},
     {collapsible: false, size: "100px"}
   ]
+});
+$("#tabstrip").kendoTabStrip({
+  animation: {
+    open: {
+      effects: "fadeIn"
+    }
+  }
 });
 
 var sc = "function validateField(fieldValue){\n\n}";

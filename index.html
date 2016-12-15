@@ -9,18 +9,69 @@
   <meta name="author" content="Gryffindor">
 
   <link rel="stylesheet" href="css/styles.css?v=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/codemirror.css">
 
 </head>
 
 <body data-ng-app="bestUI">
 <div data-ng-controller="BestUIController">
   {{greeting}}
+  <div id="code"></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.9/angular.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.9/angular-route.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/codemirror.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/mode/simple.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/mode/javascript/javascript.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/edit/matchbrackets.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jshint/r07/jshint.js"></script>
 
 <script src="js/scripts.js"></script>
 
+<script>
+  var sc = "function validateField(fieldValue){\n\n}";
+  var code = document.getElementById("code");
+  var editor = CodeMirror(code, {
+    value: (sc),
+    lineNumbers: true,
+    mode: "javascript",
+    matchBrackets: {bothBrackets: true},
+    highlightSelectionMatches: {showToken: /\w/, annotateScrollbar: true}
+  });
+  var widgets = [];
+  function updateHints() {
+    editor.operation(function(){
+      for (var i = 0; i < widgets.length; ++i)
+        editor.removeLineWidget(widgets[i]);
+      widgets.length = 0;
+
+      JSHINT(editor.getValue());
+      for (var i = 0; i < JSHINT.errors.length; ++i) {
+        var err = JSHINT.errors[i];
+        if (!err) continue;
+        var msg = document.createElement("div");
+        var icon = msg.appendChild(document.createElement("span"));
+        icon.innerHTML = "!!";
+        icon.className = "lint-error-icon";
+        msg.appendChild(document.createTextNode(err.reason));
+        msg.className = "lint-error";
+        widgets.push(editor.addLineWidget(err.line - 1, msg, {coverGutter: false, noHScroll: true}));
+      }
+    });
+    var info = editor.getScrollInfo();
+    var after = editor.charCoords({line: editor.getCursor().line + 1, ch: 0}, "local").top;
+    if (info.top + info.clientHeight < after)
+      editor.scrollTo(null, after - info.clientHeight + 3);
+  }
+
+  var waiting;
+  editor.on("change", function() {
+    clearTimeout(waiting);
+    waiting = setTimeout(updateHints, 500);
+  });
+
+  setTimeout(updateHints, 100);
+</script>
 </body>
 </html>

@@ -4,25 +4,54 @@ var bestUI = angular.module('bestUI', ['ngRoute', 'kendo.directives'])
     }]);
 
 bestUI.controller('BestUIController', ['$scope', function ($scope) {
-    $scope.greeting = 'Hola!';
-    $scope.showCodeEditor = function () {
-        $scope.editingCode = true;
-    };
-    $scope.closeCodeEditor = function () {
-        $scope.editingCode = false;
-    };
-    $scope.treeData = new kendo.data.HierarchicalDataSource({
-        data: [
-            {text: "Item 1"},
-            {
-                text: "Item 2", items: [
-                {text: "SubItem 2.1"},
-                {text: "SubItem 2.2"}
-            ]
-            },
-            {text: "Item 3"}
-        ]
-    });
+  $scope.greeting = 'Hola!';
+
+  $scope.showCodeEditor = function () {
+    $scope.editingCode = true;
+  };
+
+  $scope.closeCodeEditor = function () {
+    $scope.editingCode = false;
+  };
+
+  $scope.treeData = new kendo.data.HierarchicalDataSource({
+    data: [
+      {text: "Addresses dictionary"},
+      {text: "Cardholder", items: [
+        {text: "Name"},
+        {text: "Surname"},
+        {text: "Age"},
+        {text: "Gender"},
+        {text: "Address", items: [
+          {text: "Street name"},
+          {text: "City"},
+          {text: "Zip Code"}
+        ]},
+        {text: "Smoker"}
+      ]},
+      {text: "Packages", items:[
+        {text: "Visa Gold"},
+        {text: "Visa Silver"},
+      ]},
+      {text: "Policy Header"},
+      {text: "Policy holder"},
+      {text: "Risks"},
+      {text: "Quotation"},
+    ]
+  });
+
+  $scope.firstScreen = new kendo.data.HierarchicalDataSource({
+    data: [
+      {text: "Welcome label"},
+      {
+        text: "Section", items: [
+        {text: "Text"},
+        {text: "Number"}
+      ]
+      },
+      {text: "Next"}
+    ]
+  });
 
     $scope.click = function (dataItem) {
         alert(dataItem.text);
@@ -52,9 +81,39 @@ bestUI.controller('BestUIController', ['$scope', function ($scope) {
         var index = array.indexOf(item);
         array.splice(index, 1);
 
-        $scope.selectedItem = undefined;
-    };
+    $scope.selectedItem = undefined;
+  };
+
+  $scope.resetData = function() {
+    $scope.treeData = new kendo.data.HierarchicalDataSource({
+      data: [
+        {text: "Addresses dictionary"},
+        {text: "Cardholder", items: [
+          {text: "Name"},
+          {text: "Surname"},
+          {text: "Age"},
+          {text: "Gender"},
+          {text: "Address", items: [
+            {text: "Street name"},
+            {text: "City"},
+            {text: "Zip Code"}
+          ]},
+          {text: "Smoker"}
+        ]},
+        {text: "Packages", items:[
+          {text: "Visa Gold"},
+          {text: "Visa Silver"}
+        ]},
+        {text: "Policy Header"},
+        {text: "Policy holder"},
+        {text: "Risks"},
+        {text: "Quotation"}
+      ]
+    });
+  }
+
 }]);
+
 $("#horizontal").kendoSplitter({
     panes: [
         {collapsible: true},
@@ -85,4 +144,11 @@ $("#tabstrip").kendoTabStrip({
   }
 });
 
+var waiting;
+editor.on("change", function () {
+  clearTimeout(waiting);
+  waiting = setTimeout(updateHints, 500);
+});
+
+setTimeout(updateHints, 100);
 

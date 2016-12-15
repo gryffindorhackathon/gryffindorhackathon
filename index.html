@@ -41,12 +41,14 @@
               <div id="example">
                 <div class="demo-section k-content">
                   <div class="box-col">
-                    <h4>TreeView</h4>
-                    <div kendo-tree-view="tree"
+                    <h4>Process Structure</h4>
+                    <div kendo-tree-view="firstScreenTree"
                          k-data-source="treeData"
+                         k-drag-And-Drop = "true"
+                         k-on-dragend = "resetData()"
                          k-on-change="selectedItem = dataItem">
-                <span k-template>
-                     {{dataItem.text}} <button class='k-button' ng-click='click(dataItem)'>Select</button>
+                <span k-template >
+                      <div class='k-button'>{{dataItem.text}}</div>
                  </span>
                     </div>
                   </div>
@@ -97,7 +99,15 @@
       </div>
     </div>
   </div>
-
+  <h1>First Screen</h1>
+  <div kendo-tree-view="tree"
+       k-data-source="firstScreen"
+       k-drag-And-Drop = "true"
+       k-on-change="selectedItem = dataItem">
+                <span k-template >
+                      <div class='k-button'>{{dataItem.text}}</div>
+                 </span>
+  </div>
   <div class="scriptpopup" data-ng-show="editingCode">
     <div><button data-ng-click="closeCodeEditor()">close</button></div>
     <div id="code"></div>
@@ -124,8 +134,6 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/jszip.min.js"></script>
 <script src="js/console.js"></script>
-<script src="https://kendo.cdn.telerik.com/2016.3.1118/js/jquery.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.9/angular.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.9/angular-route.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/codemirror.js"></script>

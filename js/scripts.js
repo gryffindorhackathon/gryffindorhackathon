@@ -5,6 +5,12 @@ var bestUI = angular.module('bestUI', ['ngRoute', 'kendo.directives']).config(['
 
 bestUI.controller('BestUIController', ['$scope', function ($scope) {
   $scope.greeting = 'Hola!';
+    $scope.showCodeEditor = function () {
+        $scope.editingCode = true;
+    };
+    $scope.closeCodeEditor = function () {
+        $scope.editingCode = false;
+    };
   $scope.treeData = new kendo.data.HierarchicalDataSource({
     data: [
       {text: "Item 1"},

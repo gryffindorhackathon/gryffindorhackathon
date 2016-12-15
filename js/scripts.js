@@ -4,7 +4,6 @@ var bestUI = angular.module('bestUI', ['ngRoute', 'kendo.directives'])
   }]);
 
 bestUI.controller('BestUIController', ['$scope', function ($scope) {
-  $scope.greeting = 'Hola!';
 
   $scope.showCodeEditor = function () {
     $scope.editingCode = true;
@@ -16,33 +15,67 @@ bestUI.controller('BestUIController', ['$scope', function ($scope) {
 
   $scope.treeData = new kendo.data.HierarchicalDataSource({
     data: [
-      {text: "Addresses dictionary"},
       {
-        text: "Cardholder", items: [
-        {text: "Name"},
-        {text: "Surname"},
-        {text: "Age"},
-        {text: "Gender"},
-        {
-          text: "Address", items: [
-          {text: "Street name"},
-          {text: "City"},
-          {text: "Zip Code"}
-        ]
-        },
-        {text: "Smoker"}
-      ]
+        text: "Addresses dictionary",
+        type: "Dictionary",
+        systemCode: "addressesDictionary"
       },
       {
-        text: "Packages", items: [
-        {text: "Visa Gold"},
-        {text: "Visa Silver"},
-      ]
+        text: "Card Holder",
+        systemCode: "cardHolder",
+        type: "Class Instance",
+        items: [
+          {
+            text: "Name",
+            systemCode: "name",
+            type: "Text"
+          },
+          {
+            text: "Surname",
+            systemCode: "surname",
+            type: "Text"
+          },
+          {
+            text: "Age",
+            systemCode: "age",
+            type: "number"
+          },
+          {
+            text: "Gender",
+            systemCode: "gender",
+            type: "Dictionary"
+          },
+          {
+            text: "Address", items: [
+            {text: "Street name"},
+            {text: "City"},
+            {text: "Zip Code"}
+          ]
+          },
+          {text: "Smoker"}
+        ]
+      },
+      {
+        text: "Packages",
+        type: "advancedQuotation",
+        systemCode: "packages",
+        items: [
+          {
+            text: "Visa Gold",
+            type: "Quotation option",
+            systemCode: "visaGold"
+          },
+          {
+            text: "Visa Silver",
+            type: "Quotation option",
+            systemCode: "visaGold"
+          }
+        ]
       },
       {text: "Policy Header"},
       {text: "Policy holder"},
       {text: "Risks"},
-      {text: "Quotation"},
+      {text: "Quotation"}
     ]
   });
 
@@ -118,28 +151,62 @@ bestUI.controller('BestUIController', ['$scope', function ($scope) {
   $scope.resetData = function () {
     $scope.treeData = new kendo.data.HierarchicalDataSource({
       data: [
-        {text: "Addresses dictionary"},
         {
-          text: "Cardholder", items: [
-          {text: "Name"},
-          {text: "Surname"},
-          {text: "Age"},
-          {text: "Gender"},
-          {
-            text: "Address", items: [
-            {text: "Street name"},
-            {text: "City"},
-            {text: "Zip Code"}
-          ]
-          },
-          {text: "Smoker"}
-        ]
+          text: "Addresses dictionary",
+          type: "Dictionary",
+          systemCode: "addressesDictionary"
         },
         {
-          text: "Packages", items: [
-          {text: "Visa Gold"},
-          {text: "Visa Silver"}
-        ]
+          text: "Card Holder",
+          systemCode: "cardHolder",
+          type: "Class Instance",
+          items: [
+            {
+              text: "Name",
+              systemCode: "name",
+              type: "Text"
+            },
+            {
+              text: "Surname",
+              systemCode: "surname",
+              type: "Text"
+            },
+            {
+              text: "Age",
+              systemCode: "age",
+              type: "number"
+            },
+            {
+              text: "Gender",
+              systemCode: "gender",
+              type: "Dictionary"
+            },
+            {
+              text: "Address", items: [
+              {text: "Street name"},
+              {text: "City"},
+              {text: "Zip Code"}
+            ]
+            },
+            {text: "Smoker"}
+          ]
+        },
+        {
+          text: "Packages",
+          type: "advancedQuotation",
+          systemCode: "packages",
+          items: [
+            {
+              text: "Visa Gold",
+              type: "Quotation option",
+              systemCode: "visaGold"
+            },
+            {
+              text: "Visa Silver",
+              type: "Quotation option",
+              systemCode: "visaGold"
+            }
+          ]
         },
         {text: "Policy Header"},
         {text: "Policy holder"},
@@ -200,7 +267,7 @@ $("#horizontal").kendoSplitter({
 $("#vertical-left").kendoSplitter({
   orientation: "vertical",
   panes: [
-    {collapsible: false, size: "100px"},
+    {collapsible: false, size: "600px"},
     {collapsible: false, size: "100px"}
   ]
 });

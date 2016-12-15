@@ -32,24 +32,25 @@
         <div id="vertical-left">
           <div id="top-pane-left">
             <div class="pane-content">
+              <div class="box-col">
+                <h4>Process Structure</h4>
+                <div kendo-tree-view="firstScreenTree"
+                     k-data-source="treeData"
+                     k-drag-And-Drop="true"
+                     k-on-dragend="resetData()"
+                     k-on-change="selectedItem = dataItem">
+                <span k-template>
+                      <div class='k-button'>{{dataItem.text}}</div>
+                 </span>
+                </div>
+              </div>
             </div>
           </div>
           <div id="bottom-pane-left">
             <div class="pane-content">
               <div id="example">
                 <div class="demo-section k-content">
-                  <div class="box-col">
-                    <h4>Process Structure</h4>
-                    <div kendo-tree-view="firstScreenTree"
-                         k-data-source="treeData"
-                         k-drag-And-Drop="true"
-                         k-on-dragend="resetData()"
-                         k-on-change="selectedItem = dataItem">
-                <span k-template>
-                      <div class='k-button'>{{dataItem.text}}</div>
-                 </span>
-                    </div>
-                  </div>
+
                   <div class="box-col" ng-show="selectedItem">
                     <h4>Selected: {{selectedItem.text}}</h4>
                     <button class="k-button" ng-click="addAfter(selectedItem)">Add item below</button>
@@ -117,6 +118,15 @@
       <div id="right-pane">
         <div class="pane-content">
           <button class="k-primary center" data-ng-click="showCodeEditor()">Edit validation script</button>
+        </div>
+        <div data-ng-show="selectedItem">
+          <h1>Details</h1>
+          <form>
+            System name: <input type="text" value="{{selectedItem.text}}" /><br />
+            System code: <input type="text" value="{{selectedItem.systemCode}}" /><br />
+            Path : <input type="text" disabled/><br />
+            Type: <input type="text" value="{{selectedItem.type}}"/>
+          </form>
         </div>
       </div>
     </div>

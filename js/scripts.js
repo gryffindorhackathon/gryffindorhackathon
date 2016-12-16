@@ -257,6 +257,7 @@ bestUI.controller('BestUIController', ['$scope', 'hotkeys', function ($scope, ho
       clearTimeout(waiting);
       waiting = setTimeout(updateHints, 500);
     });
+    updateHints();
   };
 
   $scope.updateHints = function () {

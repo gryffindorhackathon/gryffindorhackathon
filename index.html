@@ -127,10 +127,18 @@
               <label for="idName">System Name</label>
               <input type="text" class="form-control" id="idName" value="{{selectedItem.text}}">
             </div>
-            System name: <input class="form-control" type="text" value="{{selectedItem.text}}" /><br />
-            System code: <input type="text" value="{{selectedItem.systemCode}}" /><br />
-            Path : <input type="text" disabled/><br />
-            Type: <input type="text" value="{{selectedItem.type}}"/>
+            <div class="form-group">
+              <label for="idSystemCode">System code</label>
+              <input type="text" class="form-control" id="idSystemCode"  value="{{selectedItem.systemCode}}">
+            </div>
+            <div class="form-group">
+            <label for="idPath">Path</label>
+            <input type="text" class="form-control" id="idPath" disabled>
+          </div>
+            <div class="form-group">
+            <label for="idType">Type</label>
+            <input type="text" class="form-control" id="idType" value="{{selectedItem.type}}">
+          </div>
           </form>
         </div>
       </div>

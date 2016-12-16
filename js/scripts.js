@@ -1,9 +1,9 @@
-var bestUI = angular.module('bestUI', ['ngRoute', 'kendo.directives'])
+var bestUI = angular.module('bestUI', ['ngRoute', 'kendo.directives', 'cfp.hotkeys'])
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/'});
   }]);
 
-bestUI.controller('BestUIController', ['$scope', function ($scope) {
+bestUI.controller('BestUIController', ['$scope', 'hotkeys', function ($scope, hotkeys) {
 
   $scope.showCodeEditor = function () {
     $scope.editingCode = true;
@@ -12,6 +12,40 @@ bestUI.controller('BestUIController', ['$scope', function ($scope) {
   $scope.closeCodeEditor = function () {
     $scope.editingCode = false;
   };
+
+  hotkeys.add({
+    combo: '1',
+    description: 'Go to First Screen',
+    callback: function(){
+      $("#tabstrip > ul > li:nth-child(1) > span.k-link").click();
+    }
+  });
+  hotkeys.add({
+    combo: '2',
+    description: 'Go to Cardholder Screen',
+    callback: function(){
+      $("#tabstrip > ul > li:nth-child(2) > span.k-link").click();
+    }
+  });
+  hotkeys.add({
+    combo: '3',
+    description: 'Go to Summary Screen',
+    callback: function(){
+      $("#tabstrip > ul > li:nth-child(3) > span.k-link").click();
+    }
+  });
+
+  hotkeys.add({
+    combo: 'v',
+    description: 'Open validation script editor',
+    callback: $scope.showCodeEditor
+  });
+
+  hotkeys.add({
+    combo: 'esc',
+    description: 'Close validation script editor',
+    callback: $scope.closeCodeEditor
+  });
 
   $scope.treeData = new kendo.data.HierarchicalDataSource({
     data: [
@@ -216,43 +250,43 @@ bestUI.controller('BestUIController', ['$scope', function ($scope) {
     });
   };
 
-    var waiting;
+  var waiting;
   $scope.activateHints = function(){
 
-      editor.on("change", function () {
-          clearTimeout(waiting);
-          waiting = setTimeout(updateHints, 500);
-      });
+    editor.on("change", function () {
+      clearTimeout(waiting);
+      waiting = setTimeout(updateHints, 500);
+    });
   };
 
   $scope.updateHints = function () {
-          editor.operation(function () {
-              for (var i = 0; i < widgets.length; ++i) {
-                  editor.removeLineWidget(widgets[i]);
-              }
-              widgets.length = 0;
-
-              JSHINT(editor.getValue());
-              for (var i = 0; i < JSHINT.errors.length; ++i) {
-                  var err = JSHINT.errors[i];
-                  if (!err) {
-                      continue;
-                  }
-                  var msg = document.createElement("div");
-                  var icon = msg.appendChild(document.createElement("span"));
-                  icon.innerHTML = "!!";
-                  icon.className = "lint-error-icon";
-                  msg.appendChild(document.createTextNode(err.reason));
-                  msg.className = "lint-error";
-                  widgets.push(editor.addLineWidget(err.line - 1, msg, {coverGutter: false, noHScroll: true}));
-              }
-          });
-          var info = editor.getScrollInfo();
-          var after = editor.charCoords({line: editor.getCursor().line + 1, ch: 0}, "local").top;
-          if (info.top + info.clientHeight < after) {
-              editor.scrollTo(null, after - info.clientHeight + 3);
-          }
+    editor.operation(function () {
+      for (var i = 0; i < widgets.length; ++i) {
+        editor.removeLineWidget(widgets[i]);
       }
+      widgets.length = 0;
+
+      JSHINT(editor.getValue());
+      for (var i = 0; i < JSHINT.errors.length; ++i) {
+        var err = JSHINT.errors[i];
+        if (!err) {
+          continue;
+        }
+        var msg = document.createElement("div");
+        var icon = msg.appendChild(document.createElement("span"));
+        icon.innerHTML = "!!";
+        icon.className = "lint-error-icon";
+        msg.appendChild(document.createTextNode(err.reason));
+        msg.className = "lint-error";
+        widgets.push(editor.addLineWidget(err.line - 1, msg, {coverGutter: false, noHScroll: true}));
+      }
+    });
+    var info = editor.getScrollInfo();
+    var after = editor.charCoords({line: editor.getCursor().line + 1, ch: 0}, "local").top;
+    if (info.top + info.clientHeight < after) {
+      editor.scrollTo(null, after - info.clientHeight + 3);
+    }
+  }
 
 }]);
 

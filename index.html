@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.3.1118/styles/kendo.material.mobile.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/codemirror.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/hint/show-hint.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-hotkeys/1.7.0/hotkeys.css">
   <link href="css/bootstrap.min.css" rel="stylesheet">
 
   <style>html {
@@ -55,7 +56,6 @@
                   <div class="box-col" ng-show="selectedItem">
                     <h4>Selected: {{selectedItem.text}}</h4>
                     <button class="k-button" ng-click="addAfter(selectedItem)">Add item below</button>
-                    <button class="k-button" ng-click="addBelow(selectedItem)">Add child item</button>
                     <button class="k-button" ng-click="remove(selectedItem)">Delete</button>
                   </div>
                 </div>
@@ -139,9 +139,9 @@
 
   <div class="scriptpopup" data-ng-show="editingCode">
     <div>
-      <button data-ng-click="closeCodeEditor()" class="k-primary" style="margin: 20px;">close</button>
-      <button data-ng-click="closeCodeEditor()" class="k-primary" style="margin: 20px;">save</button>
-      <button data-ng-click="activateHints()" class="k-primary" style="margin: 20px;">validate</button>
+      <button data-ng-click="closeCodeEditor()"  class="k-primary" style="margin: 20px;">close</button>
+      <button data-ng-click="closeCodeEditor()"  class="k-primary" style="margin: 20px;">save</button>
+      <button data-ng-click="activateHints()"  class="k-primary" style="margin: 20px;">validate</button>
     </div>
     <div id="code"></div>
   </div>
@@ -180,6 +180,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/hint/javascript-hint.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/hint/show-hint.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/search/match-highlighter.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-hotkeys/1.7.0/hotkeys.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jshint/r07/jshint.js"></script>
 
 <script src="js/kendo.all.min.js"></script>

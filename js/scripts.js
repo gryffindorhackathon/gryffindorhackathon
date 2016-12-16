@@ -219,11 +219,4 @@ $("#tabstrip").kendoTabStrip({
   }
 });
 
-var waiting;
-editor.on("change", function () {
-  clearTimeout(waiting);
-  waiting = setTimeout(updateHints, 500);
-});
-
-setTimeout(updateHints, 100);
 

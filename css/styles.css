@@ -1,8 +1,13 @@
 
 .CodeMirror {
     border: 1px solid black;
-    width: 95%;
+    width: 99%;
     margin: 0 auto;
+    height:90% !important;
+}
+
+#code{
+    height:100%;
 }
 
 .lint-error {
@@ -23,11 +28,11 @@
 }
 
 div.scriptpopup {
-    z-index: 1000;
+    z-index: 2;
     position: absolute;
-    width: 95%;
     height: 100%;
-    margin: 0 2.5%;
+    width:100%;
+    background:white;
     top: 0;
     left: 0;
 }

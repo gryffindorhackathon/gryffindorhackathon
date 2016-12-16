@@ -25,8 +25,6 @@
 
 <body data-ng-app="bestUI">
 <div data-ng-controller="BestUIController">
-  {{greeting}}
-
   <div id="example2">
     <div id="horizontal">
 
@@ -118,7 +116,7 @@
 
       <div id="right-pane">
         <div class="pane-content">
-          <button data-ng-click="showCodeEditor()">Edit validation script</button>
+          <button class="k-primary center" data-ng-click="showCodeEditor()">Edit validation script</button>
         </div>
       </div>
     </div>
@@ -126,7 +124,9 @@
 
   <div class="scriptpopup" data-ng-show="editingCode">
     <div>
-      <button data-ng-click="closeCodeEditor()">close</button>
+      <button data-ng-click="closeCodeEditor()" class="k-primary" style="margin: 20px;">close</button>
+      <button data-ng-click="closeCodeEditor()" class="k-primary" style="margin: 20px;">save</button>
+      <button data-ng-click="activateHints()" class="k-primary" style="margin: 20px;">validate</button>
     </div>
     <div id="code"></div>
   </div>
@@ -260,13 +260,8 @@
     }
   }
 
-  var waiting;
-  editor.on("change", function () {
-    clearTimeout(waiting);
-    waiting = setTimeout(updateHints, 500);
-  });
 
-  setTimeout(updateHints, 100);
+  //setTimeout(updateHints, 100);
 </script>
 
 <script>
